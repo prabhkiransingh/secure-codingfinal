@@ -11,6 +11,7 @@ export const getMatches = async (category?: string): Promise<Match[]> => {
   })) as Match[];
 };
 
+
 export const getMatchById = async (id: string): Promise<Match | null> => {
   const doc = await db.collection("matches").doc(id).get();
   return doc.exists
