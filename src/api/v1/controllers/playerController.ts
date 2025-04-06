@@ -8,6 +8,7 @@ import {
 } from "../repositories/playerRepository";
 import { successResponse, errorResponse } from "../models/Match";
 
+
 export const getAllPlayers = async (req: Request, res: Response) => {
   try {
     const players = await getPlayers(req.query.teamId as string);
