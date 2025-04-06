@@ -16,6 +16,7 @@ export const createTeam = async (team: Omit<Team, "id">): Promise<string> => {
   return docRef.id;
 };
 
+
 export const updateTeam = async (
     id: string,
     updates: Partial<Team>
