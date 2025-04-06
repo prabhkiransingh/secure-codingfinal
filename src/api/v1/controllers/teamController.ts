@@ -8,6 +8,7 @@ import {
 } from "../repositories/teamRepository";
 import { successResponse, errorResponse } from "../models/Match";
 
+
 export const getAllTeams = async (req: Request, res: Response) => {
   try {
     const teams = await getTeams();
