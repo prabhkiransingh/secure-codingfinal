@@ -5,17 +5,20 @@ import playerRoutes from "./api/v1/routes/playerRoutes";
 import teamRoutes from "./api/v1/routes/teamRoutes";
 import { errorResponse } from "./api/v1/models/Match";
 import setSwagger from "../config/swagger";
+
+
+
 const app = express();
 
 app.use(json());
+
 // Setup Swagger for API documentation
 setSwagger(app);
+
 // Mount API routes
 app.use("/api/v1/matches", matchRoutes);
 app.use("/api/v1/players", playerRoutes);
 app.use("/api/v1/teams", teamRoutes);
-
-
 
 // Error-handling middleware (must include four parameters)
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
@@ -25,9 +28,10 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 // Start the server if not in test environment
 if (process.env.NODE_ENV !== "test") {
-    const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
+
 export default app;
