@@ -8,6 +8,7 @@ export type MiddlewareFunction = (
 
 export type RequestBody = Record<string, unknown>;
 
+
 export type RequestData<T extends RequestBody = RequestBody> = {
 	body: T;
 	params: Record<string, string>;
