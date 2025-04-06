@@ -4,6 +4,7 @@ import { matchSchema, matchIdSchema } from "../Schemas/Match";
 import { requireAdmin } from "../middleware/authMiddleware";
 import * as matchController from "../controllers/matchController";
 
+
 const router = express.Router();
 
 /**
