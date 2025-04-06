@@ -6,8 +6,6 @@ import teamRoutes from "./api/v1/routes/teamRoutes";
 import { errorResponse } from "./api/v1/models/Match";
 import setSwagger from "../config/swagger";
 
-
-
 const app = express();
 
 app.use(json());
