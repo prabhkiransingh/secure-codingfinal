@@ -13,6 +13,7 @@ export const getPlayerById = async (id: string): Promise<Player | null> => {
   return doc.exists ? ({ ...doc.data(), id: doc.id } as Player) : null;
 };
 
+
 export const createPlayer = async (player: Omit<Player, "id">): Promise<string> => {
     const docRef = await db.collection("players").add(player);
     return docRef.id;
