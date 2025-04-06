@@ -1,6 +1,6 @@
 import express from "express";
 import { validateBody, validateParams } from "../middleware/validationMiddleware";
-import { matchSchema, matchIdSchema } from "../validation/matchValidation";
+import { matchSchema, matchIdSchema } from "../Schemas/Match";
 import { requireAdmin } from "../middleware/authMiddleware";
 import * as matchController from "../controllers/matchController";
 
@@ -15,10 +15,9 @@ const router = express.Router();
 
 /**
  * @swagger
- * /matches:
+ * /api/v1/matches:
  *   get:
  *     summary: Retrieve a list of matches
- *     description: Retrieve a list of matches, optionally filtered by category.
  *     tags: [Matches]
  *     responses:
  *       200:
@@ -28,22 +27,29 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Match'
- *       500:
- *         description: Internal server error.
+ *                 type: object
+ *                 properties:
+ *                   team1:
+ *                     type: string
+ *                   team2:
+ *                     type: string
+ *                   date:
+ *                     type: string
+ *                     format: date-time
+ *                   venue:
+ *                     type: string
+ *                   status:
+ *                     type: string
+ *                   score:
+ *                     type: object
  */
-router.get(
-  "/",
-  async (req: express.Request, res: express.Response) =>
-    await matchController.getAllMatches(req, res)
-);
+router.get("/", async (req, res) => await matchController.getAllMatches(req, res));
 
 /**
  * @swagger
- * /matches/random:
+ * /api/v1/matches/random:
  *   get:
  *     summary: Retrieve a random match
- *     description: Retrieve a random match from the available matches.
  *     tags: [Matches]
  *     responses:
  *       200:
@@ -51,19 +57,39 @@ router.get(
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Match'
- *       500:
- *         description: Internal server error.
+ *               type: object
+ *               required: [team1, team2, date, venue, status, score]
+ *               properties:
+ *                 team1:
+ *                   type: string
+ *                   example: India
+ *                 team2:
+ *                   type: string
+ *                   example: Australia
+ *                 date:
+ *                   type: string
+ *                   format: date-time
+ *                   example: 2025-04-06T14:00:00Z
+ *                 venue:
+ *                   type: string
+ *                   example: Wankhede Stadium
+ *                 status:
+ *                   type: string
+ *                   enum: [upcoming, in-progress, completed]
+ *                   example: upcoming
+ *                 score:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: number
+ *                   example:
+ *                     India: 250
+ *                     Australia: 245
  */
-router.get(
-  "/random",
-  async (req: express.Request, res: express.Response) =>
-    await matchController.getRandomMatch(req, res)
-);
+router.get("/random", async (req, res) => await matchController.getRandomMatch(req, res));
 
 /**
  * @swagger
- * /matches/{id}:
+ * /api/v1/matches/{id}:
  *   get:
  *     summary: Retrieve a single match by ID
  *     tags: [Matches]
@@ -73,29 +99,45 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: The match ID.
  *     responses:
  *       200:
- *         description: A single match.
+ *         description: A match object
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Match'
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *               type: object
+ *               required: [team1, team2, date, venue, status, score]
+ *               properties:
+ *                 team1:
+ *                   type: string
+ *                   example: India
+ *                 team2:
+ *                   type: string
+ *                   example: Australia
+ *                 date:
+ *                   type: string
+ *                   format: date-time
+ *                   example: 2025-04-06T14:00:00Z
+ *                 venue:
+ *                   type: string
+ *                   example: Wankhede Stadium
+ *                 status:
+ *                   type: string
+ *                   enum: [upcoming, in-progress, completed]
+ *                   example: upcoming
+ *                 score:
+ *                   type: object
+ *                   additionalProperties:
+ *                     type: number
+ *                   example:
+ *                     India: 250
+ *                     Australia: 245
  */
-router.get(
-  "/:id",
-  validateParams(matchIdSchema),
-  async (req: express.Request, res: express.Response) =>
-    await matchController.getMatch(req, res)
-);
+router.get("/:id", validateParams(matchIdSchema), async (req, res) => await matchController.getMatch(req, res));
 
 /**
  * @swagger
- * /matches:
+ * /api/v1/matches:
  *   post:
  *     summary: Create a new match
  *     tags: [Matches]
@@ -106,28 +148,44 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Match'
+ *             type: object
+ *             required: [team1, team2, date, venue, status, score]
+ *             properties:
+ *               team1:
+ *                 type: string
+ *                 example: India
+ *               team2:
+ *                 type: string
+ *                 example: Australia
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: 2025-04-06T14:00:00Z
+ *               venue:
+ *                 type: string
+ *                 example: Wankhede Stadium
+ *               status:
+ *                 type: string
+ *                 enum: [upcoming, in-progress, completed]
+ *                 example: upcoming
+ *               score:
+ *                 type: object
+ *                 additionalProperties:
+ *                   type: number
+ *                 example:
+ *                   India: 250
+ *                   Australia: 245
  *     responses:
  *       201:
  *         description: Match created successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
-router.post(
-  "/",
-  requireAdmin,
-  validateBody(matchSchema),
-  async (req: express.Request, res: express.Response) =>
-    await matchController.createMatchHandler(req, res)
-);
+router.post("/", validateBody(matchSchema), async (req, res) => await matchController.createMatchHandler(req, res));
 
 /**
  * @swagger
- * /matches/{id}:
+ * /api/v1/matches/{id}:
  *   put:
- *     summary: Update an existing match by ID
+ *     summary: Update a match
  *     tags: [Matches]
  *     security:
  *       - bearerAuth: []
@@ -137,35 +195,54 @@ router.post(
  *         required: true
  *         schema:
  *           type: string
- *         description: The match ID.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Match'
+ *             type: object
+ *             required: [team1, team2, date, venue, status, score]
+ *             properties:
+ *               team1:
+ *                 type: string
+ *                 example: India
+ *               team2:
+ *                 type: string
+ *                 example: Australia
+ *               date:
+ *                 type: string
+ *                 format: date-time
+ *                 example: 2025-04-06T14:00:00Z
+ *               venue:
+ *                 type: string
+ *                 example: Wankhede Stadium
+ *               status:
+ *                 type: string
+ *                 enum: [upcoming, in-progress, completed]
+ *                 example: upcoming
+ *               score:
+ *                 type: object
+ *                 additionalProperties:
+ *                   type: number
+ *                 example:
+ *                   India: 250
+ *                   Australia: 245
  *     responses:
  *       200:
  *         description: Match updated successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
 router.put(
   "/:id",
-  requireAdmin,
   validateParams(matchIdSchema),
   validateBody(matchSchema),
-  async (req: express.Request, res: express.Response) =>
-    await matchController.updateMatchHandler(req, res)
+  async (req, res) => await matchController.updateMatchHandler(req, res)
 );
 
 /**
  * @swagger
- * /matches/{id}:
+ * /api/v1/matches/{id}:
  *   delete:
- *     summary: Delete a match by ID
+ *     summary: Delete a match
  *     tags: [Matches]
  *     security:
  *       - bearerAuth: []
@@ -175,21 +252,14 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
- *         description: The match ID.
  *     responses:
  *       200:
  *         description: Match deleted successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
 router.delete(
   "/:id",
-  requireAdmin,
   validateParams(matchIdSchema),
-  async (req: express.Request, res: express.Response) =>
-    await matchController.deleteMatchHandler(req, res)
+  async (req, res) => await matchController.deleteMatchHandler(req, res)
 );
 
 export default router;

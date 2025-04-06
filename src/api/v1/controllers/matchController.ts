@@ -1,4 +1,3 @@
-// controllers/matchController.ts
 import { Request, Response } from "express";
 import { 
   getMatches, 

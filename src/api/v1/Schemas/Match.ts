@@ -16,5 +16,5 @@ export const matchSchema = Joi.object({
 
 // Schema for validating route parameters (e.g., /matches/:id)
 export const matchIdSchema = Joi.object({
-  id: Joi.string().required(), // You can adjust this (e.g., regex for MongoDB ObjectId) if needed.
+  id: Joi.string().required(), 
 });

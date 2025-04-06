@@ -8,15 +8,15 @@ const options = {
     info: {
       title: "Cricket API",
       version: "1.0.0",
-      description: "API for managing cricket players and matches",
+      description: "API for managing cricket players, teams, and matches",
     },
     servers: [
       {
-        url: "http://localhost:3000/api/v1",
+        url: "http://localhost:3000",
       },
     ],
   },
-  apis: ["./src/api/v1/routes/*.ts"],
+  apis: ["./src/api/v1/routes/*.ts"], // Make sure path is correct
 };
 
 const specs = swaggerJsdoc(options);

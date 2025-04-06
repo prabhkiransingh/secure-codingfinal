@@ -7,3 +7,4 @@ export interface Player {
     wickets: number;
     average: number;
   }
+  

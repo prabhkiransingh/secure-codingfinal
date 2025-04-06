@@ -1,25 +1,24 @@
 import express from "express";
 import { validateBody, validateParams } from "../middleware/validationMiddleware";
-import { teamSchema } from "../validation/teamValidation";
+import { teamSchema } from "../Schemas/Team";
 import { requireAdmin } from "../middleware/authMiddleware";
 import * as teamController from "../controllers/teamController";
-import Joi from "joi"; // Import directly from "joi"
+import Joi from "joi";
 
 const router = express.Router();
 
 /**
- * @swagger
+ * @openapi
  * tags:
  *   name: Teams
  *   description: API for managing cricket teams
  */
 
 /**
- * @swagger
- * /teams:
+ * @openapi
+ * /api/v1/teams:
  *   get:
  *     summary: Retrieve a list of teams
- *     description: Retrieve a list of all teams.
  *     tags: [Teams]
  *     responses:
  *       200:
@@ -29,18 +28,26 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Team'
- *       500:
- *         description: Internal server error.
+ *                 type: object
+ *                 required: [name, country, players]
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     example: India
+ *                   country:
+ *                     type: string
+ *                     example: India
+ *                   players:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                     example: ["Virat Kohli", "Rohit Sharma"]
  */
-router.get(
-  "/",
-  async (req, res) => await teamController.getAllTeams(req, res)
-);
+router.get("/", teamController.getAllTeams);
 
 /**
- * @swagger
- * /teams/{id}:
+ * @openapi
+ * /api/v1/teams/{id}:
  *   get:
  *     summary: Retrieve a single team by ID
  *     tags: [Teams]
@@ -57,21 +64,34 @@ router.get(
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Team'
+ *               type: object
+ *               required: [name, country, players]
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: India
+ *                 country:
+ *                   type: string
+ *                   example: India
+ *                 players:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   example: ["Virat Kohli", "Rohit Sharma"]
  *       400:
  *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *       404:
+ *         description: Team not found.
  */
 router.get(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })), 
-  async (req, res) => await teamController.getTeam(req, res)
+  validateParams(Joi.object({ id: Joi.string().required() })),
+  teamController.getTeam
 );
 
 /**
- * @swagger
- * /teams:
+ * @openapi
+ * /api/v1/teams:
  *   post:
  *     summary: Create a new team
  *     tags: [Teams]
@@ -82,25 +102,35 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Team'
+ *             type: object
+ *             required: [name, country, players]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: India
+ *               country:
+ *                 type: string
+ *                 example: India
+ *               players:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Virat Kohli", "Rohit Sharma"]
  *     responses:
  *       201:
  *         description: Team created successfully.
  *       400:
  *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
  */
-router.post(
-  "/",
-  requireAdmin,
-  validateBody(teamSchema),
-  async (req, res) => await teamController.createTeamHandler(req, res)
-);
+router.post("/",  validateBody(teamSchema), teamController.createTeamHandler);
 
 /**
- * @swagger
- * /teams/{id}:
+ * @openapi
+ * /api/v1/teams/{id}:
  *   put:
  *     summary: Update an existing team by ID
  *     tags: [Teams]
@@ -118,26 +148,42 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Team'
+ *             type: object
+ *             required: [name, country, players]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: India
+ *               country:
+ *                 type: string
+ *                 example: India
+ *               players:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 example: ["Virat Kohli", "Rohit Sharma"]
  *     responses:
  *       200:
  *         description: Team updated successfully.
  *       400:
  *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: Team not found.
  */
 router.put(
   "/:id",
-  requireAdmin,
-  validateParams(Joi.object({ id: Joi.string().required() })), 
+  validateParams(Joi.object({ id: Joi.string().required() })),
   validateBody(teamSchema),
-  async (req, res) => await teamController.updateTeamHandler(req, res)
+  teamController.updateTeamHandler
 );
 
 /**
- * @swagger
- * /teams/{id}:
+ * @openapi
+ * /api/v1/teams/{id}:
  *   delete:
  *     summary: Delete a team by ID
  *     tags: [Teams]
@@ -155,14 +201,17 @@ router.put(
  *         description: Team deleted successfully.
  *       400:
  *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *       401:
+ *         description: Unauthorized.
+ *       403:
+ *         description: Forbidden.
+ *       404:
+ *         description: Team not found.
  */
 router.delete(
   "/:id",
-  requireAdmin,
-  validateParams(Joi.object({ id: Joi.string().required() })), 
-  async (req, res) => await teamController.deleteTeamHandler(req, res)
+  validateParams(Joi.object({ id: Joi.string().required() })),
+  teamController.deleteTeamHandler
 );
 
 export default router;

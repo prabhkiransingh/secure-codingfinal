@@ -1,0 +1,226 @@
+{
+	"info": {
+		"_postman_id": "ea36f0fb-4b1a-4ba1-8ec2-c72987b0b737",
+		"name": "project cricket",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "41184998"
+	},
+	"item": [
+		{
+			"name": "players",
+			"item": [
+				{
+					"name": "players",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/players"
+					},
+					"response": []
+				},
+				{
+					"name": "create player",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Virat\",\r\n  \"teamId\": \"64fb19c58b8e4e001e558abe\",\r\n  \"role\": \"batsman\",\r\n  \"runs\": 12000,\r\n  \"wickets\": 50,\r\n  \"average\": 55.45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/players"
+					},
+					"response": []
+				},
+				{
+					"name": "retrieve player",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/players/71pRPNxkN91HXaAKjbzb"
+					},
+					"response": []
+				},
+				{
+					"name": "update player",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Virat Kohli\",\r\n  \"teamId\": \"64fb19c58b8e4e001e558abe\",\r\n  \"role\": \"batsman\",\r\n  \"runs\": 12000,\r\n  \"wickets\": 50,\r\n  \"average\": 55.45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/players/71pRPNxkN91HXaAKjbzb"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete player",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/players/71pRPNxkN91HXaAKjbzb"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matches",
+			"item": [
+				{
+					"name": "get match",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"team1\": \"India\",\r\n  \"team2\": \"Australia\",\r\n  \"date\": \"2025-04-10T14:00:00Z\",\r\n  \"venue\": \"Wankhede Stadium\",\r\n  \"status\": \"upcoming\",\r\n  \"score\": {\r\n    \"India\": 0,\r\n    \"Australia\": 0\r\n  }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/matches"
+					},
+					"response": []
+				},
+				{
+					"name": "create match",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"team1\": \"India\",\r\n  \"team2\": \"Australia\",\r\n  \"date\": \"2025-04-06T14:00:00Z\",\r\n  \"venue\": \"Wankhede Stadium\",\r\n  \"status\": \"upcoming\",\r\n  \"score\": {\r\n    \"India\": 250,\r\n    \"Australia\": 245\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/matches"
+					},
+					"response": []
+				},
+				{
+					"name": "random match",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/matches/random"
+					},
+					"response": []
+				},
+				{
+					"name": "matchID",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"team1\": \"Ind\",\r\n  \"team2\": \"Aus\",\r\n  \"date\": \"2025-04-06T14:00:00Z\",\r\n  \"venue\": \"Wankhede Stadium\",\r\n  \"status\": \"upcoming\",\r\n  \"score\": {\r\n    \"India\": 252,\r\n    \"Australia\": 245\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/matches/abMizCvKnGincSpWb2sg"
+					},
+					"response": []
+				},
+				{
+					"name": "delete match",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/matches/abMizCvKnGincSpWb2sg"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "retrieve team list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/teams"
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new team",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"India\",\r\n  \"country\": \"India\",\r\n  \"players\": [\r\n    \"Virat Kohli\",\r\n    \"Rohit Sharma\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/teams"
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve a single team",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/teams/A14155lBjyCSySO8EvZO"
+					},
+					"response": []
+				},
+				{
+					"name": "updating existing team",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"India\",\r\n  \"country\": \"India\",\r\n  \"players\": [\r\n    \"parry sidhu\",\r\n    \"Rohit Sharma\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:3000/api/v1/teams/A14155lBjyCSySO8EvZO"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete team",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:3000/api/v1/teams/A14155lBjyCSySO8EvZO"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

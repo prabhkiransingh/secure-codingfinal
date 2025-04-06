@@ -12,7 +12,7 @@ const authenticate = async (req: Request, res: Response, next: NextFunction): Pr
   try {
     const decodedToken = await auth.verifyIdToken(token);
     res.locals.uid = decodedToken.uid;
-    res.locals.role = decodedToken.role; // Assuming custom claims include 'role'
+    res.locals.role = decodedToken.role; 
     next();
   } catch (error) {
     throw new AuthenticationError("Unauthorized: Invalid token", "TOKEN_INVALID");

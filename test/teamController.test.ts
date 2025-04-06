@@ -1,9 +1,6 @@
 import request from "supertest";
 import app from "../src/app";
 
-
-
-// Mock the team repository
 jest.mock("../src/api/v1/repositories/teamRepository");
 
 import {

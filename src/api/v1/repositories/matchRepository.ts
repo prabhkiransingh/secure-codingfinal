@@ -1,4 +1,3 @@
-// repositories/matchRepository.ts
 import { db } from "../../../../config/firebaseConfig";
 import { Match } from "../models/Match";
 

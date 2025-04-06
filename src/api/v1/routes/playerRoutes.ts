@@ -1,25 +1,24 @@
 import express from "express";
 import { validateBody, validateParams } from "../middleware/validationMiddleware";
-import { playerSchema } from "../validation/playerValidation";
+import { playerSchema } from "../Schemas/Player";
 import { requireAdmin } from "../middleware/authMiddleware";
 import * as playerController from "../controllers/playerController";
-import Joi from "joi"; 
+import Joi from "joi";
 
 const router = express.Router();
 
 /**
- * @swagger
+ * @openapi
  * tags:
  *   name: Players
  *   description: API for managing cricket players
  */
 
 /**
- * @swagger
- * /players:
+ * @openapi
+ * /api/v1/players:
  *   get:
  *     summary: Retrieve a list of players
- *     description: Retrieve a list of all players.
  *     tags: [Players]
  *     responses:
  *       200:
@@ -29,18 +28,37 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Player'
- *       500:
- *         description: Internal server error.
+ *                 type: object
+ *                 required: [name, teamId, role, runs, wickets, average]
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     example: Virat Kohli
+ *                   teamId:
+ *                     type: string
+ *                     example: 64fb19c58b8e4e001e558abe
+ *                   role:
+ *                     type: string
+ *                     enum: [batsman, bowler, all-rounder, wicketkeeper]
+ *                     example: batsman
+ *                   runs:
+ *                     type: number
+ *                     minimum: 0
+ *                     example: 12000
+ *                   wickets:
+ *                     type: number
+ *                     minimum: 0
+ *                     example: 50
+ *                   average:
+ *                     type: number
+ *                     minimum: 0
+ *                     example: 55.45
  */
-router.get(
-  "/",
-  async (req, res) => await playerController.getAllPlayers(req, res)
-);
+router.get("/", async (req, res) => await playerController.getAllPlayers(req, res));
 
 /**
- * @swagger
- * /players/{id}:
+ * @openapi
+ * /api/v1/players/{id}:
  *   get:
  *     summary: Retrieve a single player by ID
  *     tags: [Players]
@@ -50,28 +68,44 @@ router.get(
  *         required: true
  *         schema:
  *           type: string
- *         description: The player ID.
  *     responses:
  *       200:
  *         description: A single player.
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Player'
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
+ *               type: object
+ *               required: [name, teamId, role, runs, wickets, average]
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                   example: Virat Kohli
+ *                 teamId:
+ *                   type: string
+ *                   example: 64fb19c58b8e4e001e558abe
+ *                 role:
+ *                   type: string
+ *                   enum: [batsman, bowler, all-rounder, wicketkeeper]
+ *                   example: batsman
+ *                 runs:
+ *                   type: number
+ *                   example: 12000
+ *                 wickets:
+ *                   type: number
+ *                   example: 50
+ *                 average:
+ *                   type: number
+ *                   example: 55.45
  */
 router.get(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })), 
+  validateParams(Joi.object({ id: Joi.string().required() })),
   async (req, res) => await playerController.getPlayer(req, res)
 );
 
 /**
- * @swagger
- * /players:
+ * @openapi
+ * /api/v1/players:
  *   post:
  *     summary: Create a new player
  *     tags: [Players]
@@ -82,25 +116,44 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Player'
+ *             type: object
+ *             required: [name, teamId, role, runs, wickets, average]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Virat Kohli
+ *               teamId:
+ *                 type: string
+ *                 example: 64fb19c58b8e4e001e558abe
+ *               role:
+ *                 type: string
+ *                 enum: [batsman, bowler, all-rounder, wicketkeeper]
+ *                 example: batsman
+ *               runs:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 12000
+ *               wickets:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 50
+ *               average:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 55.45
  *     responses:
  *       201:
  *         description: Player created successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
 router.post(
   "/",
-  requireAdmin,
   validateBody(playerSchema),
   async (req, res) => await playerController.createPlayerHandler(req, res)
 );
 
 /**
- * @swagger
- * /players/{id}:
+ * @openapi
+ * /api/v1/players/{id}:
  *   put:
  *     summary: Update an existing player by ID
  *     tags: [Players]
@@ -112,32 +165,50 @@ router.post(
  *         required: true
  *         schema:
  *           type: string
- *         description: The player ID.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Player'
+ *             type: object
+ *             required: [name, teamId, role, runs, wickets, average]
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Virat Kohli
+ *               teamId:
+ *                 type: string
+ *                 example: 64fb19c58b8e4e001e558abe
+ *               role:
+ *                 type: string
+ *                 enum: [batsman, bowler, all-rounder, wicketkeeper]
+ *                 example: batsman
+ *               runs:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 12000
+ *               wickets:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 50
+ *               average:
+ *                 type: number
+ *                 minimum: 0
+ *                 example: 55.45
  *     responses:
  *       200:
  *         description: Player updated successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
 router.put(
   "/:id",
-  requireAdmin,
-  validateParams(Joi.object({ id: Joi.string().required() })), 
+  validateParams(Joi.object({ id: Joi.string().required() })),
   validateBody(playerSchema),
   async (req, res) => await playerController.updatePlayerHandler(req, res)
 );
 
 /**
- * @swagger
- * /players/{id}:
+ * @openapi
+ * /api/v1/players/{id}:
  *   delete:
  *     summary: Delete a player by ID
  *     tags: [Players]
@@ -149,19 +220,13 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
- *         description: The player ID.
  *     responses:
  *       200:
  *         description: Player deleted successfully.
- *       400:
- *         description: Bad Request.
- *       500:
- *         description: Internal server error.
  */
 router.delete(
   "/:id",
-  requireAdmin,
-  validateParams(Joi.object({ id: Joi.string().required() })), 
+  validateParams(Joi.object({ id: Joi.string().required() })),
   async (req, res) => await playerController.deletePlayerHandler(req, res)
 );
 

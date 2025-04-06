@@ -9,7 +9,7 @@ export const matchService = {
   },
 
   createMatch: async (match: Omit<Match, "id">): Promise<Match> => {
-    // Firestore generates the document id
+    
     const matchRef: DocumentReference = await db.collection("matches").add(match);
     return { id: matchRef.id, ...match };
   }
