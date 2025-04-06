@@ -9,4 +9,5 @@ export const playerSchema = Joi.object({
   runs: Joi.number().min(0).required(),
   wickets: Joi.number().min(0).required(),
   average: Joi.number().min(0).required()
+  
 });
