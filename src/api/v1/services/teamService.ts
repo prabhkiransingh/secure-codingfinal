@@ -9,6 +9,7 @@ export const getTeamById = async (id: string): Promise<Team | null> => {
   return await teamRepository.getTeamById(id);
 };
 
+
 export const createTeam = async (teamData: Partial<Team>): Promise<string> => {
   const team: Team = {
     id: "", 
