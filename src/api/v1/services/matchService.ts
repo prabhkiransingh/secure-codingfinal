@@ -8,6 +8,7 @@ export const matchService = {
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Match));
   },
 
+  
   createMatch: async (match: Omit<Match, "id">): Promise<Match> => {
     
     const matchRef: DocumentReference = await db.collection("matches").add(match);
