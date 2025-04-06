@@ -14,6 +14,7 @@ export const matchSchema = Joi.object({
     .required(),
 });
 
+
 // Schema for validating route parameters (e.g., /matches/:id)
 export const matchIdSchema = Joi.object({
   id: Joi.string().required(), 
