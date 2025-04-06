@@ -39,6 +39,7 @@ export class BaseError extends Error {
     }
   }
   
+  
   /**
    * ServiceError is thrown for errors that occur in the business logic layer.
    */
