@@ -32,6 +32,7 @@ describe("Player Controller API", () => {
     expect(res.body.data).toHaveLength(1);
   });
 
+  
   it("should fetch a player by ID", async () => {
     // Arrange: 
     (getPlayerById as jest.Mock).mockResolvedValue(mockPlayer);
