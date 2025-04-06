@@ -6,5 +6,6 @@ export interface Player {
     runs: number;
     wickets: number;
     average: number;
+    
   }
   
