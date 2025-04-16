@@ -12,7 +12,6 @@ router.get(
   getEditorDetails
 );
 
-
 router.put(
   "/:id",
   authenticate,isAuthorized
