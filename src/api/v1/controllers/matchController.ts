@@ -6,7 +6,7 @@ import {
   updateMatch, 
   deleteMatch 
 } from "../repositories/matchRepository";
-import { successResponse, errorResponse } from "../models/Match";
+import { successResponse, errorResponse } from "../models/Matchmodels";
 
 export const getAllMatches = async (req: Request, res: Response) => {
   try {

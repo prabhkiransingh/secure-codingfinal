@@ -1,4 +1,4 @@
-const swaggerJsdoc = require("swagger-jsdoc");
+import swaggerJsdoc from "swagger-jsdoc";
 
 const swaggerOptions = {
   definition: {
@@ -10,10 +10,24 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000/api/v1",
+        url: "http://localhost:7000/api/v1",
         description: "Local server",
       },
     ],
+    components: {
+      securitySchemes: {
+          bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
+          },
+      },
+  },
+  security: [
+      {
+          bearerAuth: [],
+      },
+  ],
   },
   apis: ["./src/api/v1/routes/*.ts", "./src/api/v1/models/*.ts"],
 };

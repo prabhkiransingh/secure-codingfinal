@@ -1,22 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import { auth } from "../../../../config/firebaseConfig";
+import axios from "axios";
+import jwt, { JwtHeader, SigningKeyCallback } from "jsonwebtoken";
+import jwksClient from "jwks-rsa";
 import { AuthenticationError } from "../errors/errors";
+import { getErrorMessage, getErrorCode } from "../utils/errorUtils";
 
-const authenticate = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  const token: string | undefined = req.headers.authorization?.split(" ")[1];
-
+export const authenticate = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  const token = req.headers.authorization?.split(" ")[1];
   if (!token) {
-    throw new AuthenticationError("Unauthorized: No token provided", "TOKEN_NOT_FOUND");
+    return next(new AuthenticationError("No token provided", "TOKEN_NOT_FOUND"));
   }
 
   try {
-    const decodedToken = await auth.verifyIdToken(token);
-    res.locals.uid = decodedToken.uid;
-    res.locals.role = decodedToken.role; 
+    const decoded = jwt.decode(token, { complete: true }) as any;
+
+    if (!decoded || !decoded.payload) {
+      return next(new AuthenticationError("Invalid token", "TOKEN_INVALID"));
+    }
+
+    // Optional: you can inspect the payload for role, uid, etc.
+    res.locals.uid = decoded.payload.user_id || decoded.payload.sub;
+    res.locals.role = decoded.payload.role || "user";
     next();
   } catch (error) {
-    throw new AuthenticationError("Unauthorized: Invalid token", "TOKEN_INVALID");
+    return next(
+      new AuthenticationError("Error decoding token", getErrorCode(error))
+    );
   }
 };
-
-export default authenticate;

@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebaseConfig";
-import { Player } from "../models/Player";
+import { Player } from "../models/Playermodels";
 
 export const getPlayers = async (teamId?: string): Promise<Player[]> => {
   const query = db.collection("players");

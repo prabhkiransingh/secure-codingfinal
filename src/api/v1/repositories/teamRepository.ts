@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebaseConfig";
-import { Team } from "../models/Team";
+import { Team } from "../models/Teammodels";
 
 export const getTeams = async (): Promise<Team[]> => {
   const snapshot = await db.collection("teams").get();

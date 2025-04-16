@@ -1,0 +1,711 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cricket API Documentation",
+    "version": "1.0.0",
+    "description": "API to retrieve cricket match details, player stats, and team information."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:7000/api/v1",
+      "description": "Local server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "Match": {
+        "type": "object",
+        "required": [
+          "id",
+          "team1",
+          "team2",
+          "date",
+          "venue",
+          "status",
+          "score"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "team1": {
+            "type": "string"
+          },
+          "team2": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "venue": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "upcoming",
+              "in-progress",
+              "completed"
+            ]
+          },
+          "score": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "Player": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "teamId",
+          "role",
+          "runs",
+          "wickets",
+          "average"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique player ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the player",
+            "example": "Virat Kohli"
+          },
+          "teamId": {
+            "type": "string",
+            "description": "Associated team ID",
+            "example": "64fb19c58b8e4e001e558abe"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "batsman",
+              "bowler",
+              "all-rounder",
+              "wicketkeeper"
+            ],
+            "example": "batsman"
+          },
+          "runs": {
+            "type": "number",
+            "minimum": 0,
+            "example": 12000
+          },
+          "wickets": {
+            "type": "number",
+            "minimum": 0,
+            "example": 50
+          },
+          "average": {
+            "type": "number",
+            "minimum": 0,
+            "example": 55.45
+          }
+        }
+      },
+      "Team": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "country",
+          "players"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique team ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Team name",
+            "example": "India"
+          },
+          "country": {
+            "type": "string",
+            "description": "Country the team represents",
+            "example": "India"
+          },
+          "players": {
+            "type": "array",
+            "description": "List of player names or IDs",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Virat Kohli",
+              "Rohit Sharma"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/matches": {
+      "get": {
+        "summary": "Retrieve a list of matches",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of matches",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Match"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new match",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Match"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Match created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/v1/matches/random": {
+      "get": {
+        "summary": "Retrieve a random match",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A random match",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Match"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/matches/{id}": {
+      "get": {
+        "summary": "Retrieve a single match by ID",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A match object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Match"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a match",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Match"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Match updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a match",
+        "tags": [
+          "Matches"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Match deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/players": {
+      "get": {
+        "summary": "Retrieve a list of players",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of players",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Player"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new player",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Player"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Player created successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/v1/players/{id}": {
+      "get": {
+        "summary": "Retrieve a single player by ID",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A player object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Player"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing player by ID",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Player"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Player updated successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a player by ID",
+        "tags": [
+          "Players"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Player deleted successfully"
+          }
+        }
+      }
+    },
+    "/api/v1/teams": {
+      "get": {
+        "summary": "Retrieve a list of teams",
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Team"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new team",
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Team"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Team created successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/teams/{id}": {
+      "get": {
+        "summary": "Retrieve a single team by ID",
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The team ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A team object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Team"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing team by ID",
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The team ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Team"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Team updated successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a team by ID",
+        "tags": [
+          "Teams"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The team ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team deleted successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Matches",
+      "description": "API for managing cricket matches"
+    },
+    {
+      "name": "Players",
+      "description": "API for managing cricket players"
+    },
+    {
+      "name": "Teams",
+      "description": "API for managing cricket teams"
+    }
+  ]
+}

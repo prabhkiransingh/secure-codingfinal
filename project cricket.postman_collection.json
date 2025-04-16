@@ -39,9 +39,24 @@
 				{
 					"name": "retrieve player",
 					"request": {
-						"method": "GET",
-						"header": [],
-						"url": "http://localhost:3000/api/v1/players/71pRPNxkN91HXaAKjbzb"
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InJQV1pUZyJ9.eyJpc3MiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGUuY29tLyIsImF1ZCI6ImNyaWNrZXQtYzU4MTAiLCJpYXQiOjE3NDQ3NjMzMzUsImV4cCI6MTc0NTk3MjkzNSwidXNlcl9pZCI6ImpFUEJOckNpUkhNaGlBQlRaOXJEV2tHMHhUNzIiLCJlbWFpbCI6InZpcmF0QGdhbWlsLmNvbSIsInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCIsInZlcmlmaWVkIjpmYWxzZX0.0zzl7PWFDjmyI8IN7Xah1J1_uTfQXbHKO471mFBCN43EPB1TneGIUG73c10lc1VOqOhhyrjWZpTLo4_NCpMoNJkJA8CjzvixR6uOHTopkQnEncwT9UYWQFFoySCtfEcSFu3U1iwsLwKRk9YAQV0haFkt4ABo8frzOMDCJxlgIbborAbxe9niPAH2kJQRb5-Gvcta7vl-r-lTYmfOUi5GQyS_XUdfXCbOW5rvBZ9OepTt_EoxjOFHbW_G8BSwRuA596ucTbQnQEfnH1GXJA8u6WbnKUQ1baJweQKfCkUgZw6ACVWRcmVJSJKVFSdafFH7coPS3GiLl5CMSIiCJVr39w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Virat Singh\",\r\n  \"teamId\": \"64fb19c58b8e4e001e558abe\",\r\n  \"role\": \"batsman\",\r\n  \"runs\": 12000,\r\n  \"wickets\": 50,\r\n  \"average\": 55.45\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:7000/api/v1/players/5pyGcn4Pd4AcnA4c2xav"
 					},
 					"response": []
 				},
@@ -221,6 +236,66 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"prrsidhu@gmail.com\",\r\n  \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=\nAIzaSyDtxU6wwFhj-OcgNqMxuxZViW8feJ3AvDA",
+					"protocol": "https",
+					"host": [
+						"identitytoolkit",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"accounts:signInWithPassword"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "\nAIzaSyDtxU6wwFhj-OcgNqMxuxZViW8feJ3AvDA"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "setcustomcalim",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6InJQV1pUZyJ9.eyJpc3MiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGUuY29tLyIsImF1ZCI6ImNyaWNrZXQtYzU4MTAiLCJpYXQiOjE3NDQ3Mzk1NzIsImV4cCI6MTc0NTk0OTE3MiwidXNlcl9pZCI6ImU1S3NhaFZPT25SVElpbk5DVkpuaUNLbU5NSTMiLCJlbWFpbCI6ImlwbEBnbWFpbC5jb20iLCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQiLCJ2ZXJpZmllZCI6ZmFsc2V9.pzd6TjjQpCNIcYNeBF4g01s7L1tmivLlUS8NdwOOJNnKtlIuLUxOT73k3Ug_7Buv7BB-v0DNRouQbm6WZSwYRPwCTEMLN5oqVTVA71ZD-5UKRQ1WVJQWQgowmRgtP-BHLI_e4sbeXxYkrFcBIAxeaO-wftA20Y7qAMpRbJYE1gw_0yWKzggSKumVcmUMkBG8cbMOgyaE365OFPyGV1GqKuYaNwYLSjLuafwvYxkRQJJnIEbxFHhO_yTXItHvgx1dOnK820xuK3dBEEyCL_g9dxFe9-ElxM7jpnPSoHprA2w-C-sJm6ANXMUxZbzpCqEuggzc8xar2Cnj17fFY8-tAQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"uid\": \"e5KsahVOOnRTIinNCVJniCKmNMI3\",\r\n  \"claims\": {\r\n    \"role\": \"admin\"\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:7000/api/v1/admin/setCustomClaims"
+			},
+			"response": []
 		}
 	]
 }

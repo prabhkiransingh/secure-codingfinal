@@ -1,10 +1,10 @@
 import express from "express";
-import { validateBody, validateParams } from "../middleware/validationMiddleware";
-import { teamSchema } from "../Schemas/Team";
-import { requireAdmin } from "../middleware/authMiddleware";
-import * as teamController from "../controllers/teamController";
 import Joi from "joi";
-
+import { validateRequest } from "../middleware/validationMiddleware";
+import { teamSchema } from "../Schemas/Team";
+import { isAuthorized } from "../middleware/authorize";
+import { authenticate } from "../middleware/authenticate";
+import * as teamController from "../controllers/teamController";
 
 const router = express.Router();
 
@@ -21,30 +21,19 @@ const router = express.Router();
  *   get:
  *     summary: Retrieve a list of teams
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of teams.
+ *         description: A list of teams
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 required: [name, country, players]
- *                 properties:
- *                   name:
- *                     type: string
- *                     example: India
- *                   country:
- *                     type: string
- *                     example: India
- *                   players:
- *                     type: array
- *                     items:
- *                       type: string
- *                     example: ["Virat Kohli", "Rohit Sharma"]
+ *                 $ref: '#/components/schemas/Team'
  */
-router.get("/", teamController.getAllTeams);
+router.get("/", authenticate, teamController.getAllTeams);
 
 /**
  * @openapi
@@ -52,41 +41,31 @@ router.get("/", teamController.getAllTeams);
  *   get:
  *     summary: Retrieve a single team by ID
  *     tags: [Teams]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: The team ID.
+ *         description: The team ID
  *     responses:
  *       200:
- *         description: A single team.
+ *         description: A team object
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [name, country, players]
- *               properties:
- *                 name:
- *                   type: string
- *                   example: India
- *                 country:
- *                   type: string
- *                   example: India
- *                 players:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["Virat Kohli", "Rohit Sharma"]
+ *               $ref: '#/components/schemas/Team'
  *       400:
- *         description: Bad Request.
+ *         description: Bad Request
  *       404:
- *         description: Team not found.
+ *         description: Team not found
  */
 router.get(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
+  authenticate,
+  validateRequest(Joi.object({ id: Joi.string().required() })),
   teamController.getTeam
 );
 
@@ -103,31 +82,24 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [name, country, players]
- *             properties:
- *               name:
- *                 type: string
- *                 example: India
- *               country:
- *                 type: string
- *                 example: India
- *               players:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["Virat Kohli", "Rohit Sharma"]
+ *             $ref: '#/components/schemas/Team'
  *     responses:
  *       201:
- *         description: Team created successfully.
+ *         description: Team created successfully
  *       400:
- *         description: Bad Request.
+ *         description: Bad Request
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Forbidden.
+ *         description: Forbidden
  */
-router.post("/",  validateBody(teamSchema), teamController.createTeamHandler);
+router.post(
+  "/",
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
+  validateRequest(teamSchema),
+  teamController.createTeamHandler
+);
 
 /**
  * @openapi
@@ -143,42 +115,31 @@ router.post("/",  validateBody(teamSchema), teamController.createTeamHandler);
  *         required: true
  *         schema:
  *           type: string
- *         description: The team ID.
+ *         description: The team ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [name, country, players]
- *             properties:
- *               name:
- *                 type: string
- *                 example: India
- *               country:
- *                 type: string
- *                 example: India
- *               players:
- *                 type: array
- *                 items:
- *                   type: string
- *                 example: ["Virat Kohli", "Rohit Sharma"]
+ *             $ref: '#/components/schemas/Team'
  *     responses:
  *       200:
- *         description: Team updated successfully.
+ *         description: Team updated successfully
  *       400:
- *         description: Bad Request.
+ *         description: Bad Request
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Forbidden.
+ *         description: Forbidden
  *       404:
- *         description: Team not found.
+ *         description: Team not found
  */
 router.put(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
-  validateBody(teamSchema),
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
+  validateRequest(Joi.object({ id: Joi.string().required() })),
+  validateRequest(teamSchema),
   teamController.updateTeamHandler
 );
 
@@ -196,22 +157,24 @@ router.put(
  *         required: true
  *         schema:
  *           type: string
- *         description: The team ID.
+ *         description: The team ID
  *     responses:
  *       200:
- *         description: Team deleted successfully.
+ *         description: Team deleted successfully
  *       400:
- *         description: Bad Request.
+ *         description: Bad Request
  *       401:
- *         description: Unauthorized.
+ *         description: Unauthorized
  *       403:
- *         description: Forbidden.
+ *         description: Forbidden
  *       404:
- *         description: Team not found.
+ *         description: Team not found
  */
 router.delete(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
+  validateRequest(Joi.object({ id: Joi.string().required() })),
   teamController.deleteTeamHandler
 );
 

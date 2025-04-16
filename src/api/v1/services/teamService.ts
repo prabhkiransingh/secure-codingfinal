@@ -1,4 +1,4 @@
-import { Team } from "../models/Team";
+import { Team } from "../models/Teammodels";
 import * as teamRepository from "../repositories/teamRepository";
 
 export const getAllTeams = async (): Promise<Team[]> => {

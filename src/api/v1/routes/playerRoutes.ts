@@ -1,12 +1,11 @@
 import express from "express";
-import { validateBody, validateParams } from "../middleware/validationMiddleware";
-import { playerSchema } from "../Schemas/Player";
-import { requireAdmin } from "../middleware/authMiddleware";
+import { validateRequest } from "../middleware/validationMiddleware";
+import { isAuthorized } from "../middleware/authorize";
+import { playerSchema} from "../Schemas/Player";
 import * as playerController from "../controllers/playerController";
-import Joi from "joi";
+import { authenticate } from "../middleware/authenticate"; 
 
 const router = express.Router();
-
 
 /**
  * @openapi
@@ -21,41 +20,19 @@ const router = express.Router();
  *   get:
  *     summary: Retrieve a list of players
  *     tags: [Players]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: A list of players.
+ *         description: A list of players
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 required: [name, teamId, role, runs, wickets, average]
- *                 properties:
- *                   name:
- *                     type: string
- *                     example: Virat Kohli
- *                   teamId:
- *                     type: string
- *                     example: 64fb19c58b8e4e001e558abe
- *                   role:
- *                     type: string
- *                     enum: [batsman, bowler, all-rounder, wicketkeeper]
- *                     example: batsman
- *                   runs:
- *                     type: number
- *                     minimum: 0
- *                     example: 12000
- *                   wickets:
- *                     type: number
- *                     minimum: 0
- *                     example: 50
- *                   average:
- *                     type: number
- *                     minimum: 0
- *                     example: 55.45
+ *                 $ref: '#/components/schemas/Player'
  */
-router.get("/", async (req, res) => await playerController.getAllPlayers(req, res));
+router.get("/", authenticate, async (req, res) => await playerController.getAllPlayers(req, res));
 
 /**
  * @openapi
@@ -63,6 +40,8 @@ router.get("/", async (req, res) => await playerController.getAllPlayers(req, re
  *   get:
  *     summary: Retrieve a single player by ID
  *     tags: [Players]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -71,38 +50,13 @@ router.get("/", async (req, res) => await playerController.getAllPlayers(req, re
  *           type: string
  *     responses:
  *       200:
- *         description: A single player.
+ *         description: A player object
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               required: [name, teamId, role, runs, wickets, average]
- *               properties:
- *                 name:
- *                   type: string
- *                   example: Virat Kohli
- *                 teamId:
- *                   type: string
- *                   example: 64fb19c58b8e4e001e558abe
- *                 role:
- *                   type: string
- *                   enum: [batsman, bowler, all-rounder, wicketkeeper]
- *                   example: batsman
- *                 runs:
- *                   type: number
- *                   example: 12000
- *                 wickets:
- *                   type: number
- *                   example: 50
- *                 average:
- *                   type: number
- *                   example: 55.45
+ *               $ref: '#/components/schemas/Player'
  */
-router.get(
-  "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
-  async (req, res) => await playerController.getPlayer(req, res)
-);
+router.get("/:id", authenticate, validateRequest(playerSchema), async (req, res) => await playerController.getPlayer(req, res));
 
 /**
  * @openapi
@@ -117,40 +71,21 @@ router.get(
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [name, teamId, role, runs, wickets, average]
- *             properties:
- *               name:
- *                 type: string
- *                 example: Virat Kohli
- *               teamId:
- *                 type: string
- *                 example: 64fb19c58b8e4e001e558abe
- *               role:
- *                 type: string
- *                 enum: [batsman, bowler, all-rounder, wicketkeeper]
- *                 example: batsman
- *               runs:
- *                 type: number
- *                 minimum: 0
- *                 example: 12000
- *               wickets:
- *                 type: number
- *                 minimum: 0
- *                 example: 50
- *               average:
- *                 type: number
- *                 minimum: 0
- *                 example: 55.45
+ *             $ref: '#/components/schemas/Player'
  *     responses:
  *       201:
- *         description: Player created successfully.
+ *         description: Player created successfully
+ *       400:
+ *         description: Invalid input
  */
 router.post(
   "/",
-  validateBody(playerSchema),
-  async (req, res) => await playerController.createPlayerHandler(req, res)
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
+  validateRequest(playerSchema),
+  playerController.createPlayerHandler
 );
+
 
 /**
  * @openapi
@@ -171,39 +106,18 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required: [name, teamId, role, runs, wickets, average]
- *             properties:
- *               name:
- *                 type: string
- *                 example: Virat Kohli
- *               teamId:
- *                 type: string
- *                 example: 64fb19c58b8e4e001e558abe
- *               role:
- *                 type: string
- *                 enum: [batsman, bowler, all-rounder, wicketkeeper]
- *                 example: batsman
- *               runs:
- *                 type: number
- *                 minimum: 0
- *                 example: 12000
- *               wickets:
- *                 type: number
- *                 minimum: 0
- *                 example: 50
- *               average:
- *                 type: number
- *                 minimum: 0
- *                 example: 55.45
+ *             $ref: '#/components/schemas/Player'
  *     responses:
  *       200:
- *         description: Player updated successfully.
+ *         description: Player updated successfully
+ *       400:
+ *         description: Invalid input
  */
 router.put(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
-  validateBody(playerSchema),
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
+  validateRequest(playerSchema),
   async (req, res) => await playerController.updatePlayerHandler(req, res)
 );
 
@@ -223,11 +137,12 @@ router.put(
  *           type: string
  *     responses:
  *       200:
- *         description: Player deleted successfully.
+ *         description: Player deleted successfully
  */
 router.delete(
   "/:id",
-  validateParams(Joi.object({ id: Joi.string().required() })),
+  authenticate,
+  isAuthorized({ allowSameUser: false, hasRole: ["admin", "user"] }),
   async (req, res) => await playerController.deletePlayerHandler(req, res)
 );
 

@@ -6,7 +6,7 @@ import {
   updateTeam, 
   deleteTeam 
 } from "../repositories/teamRepository";
-import { successResponse, errorResponse } from "../models/Match";
+import { successResponse, errorResponse } from "../models/Matchmodels";
 
 
 export const getAllTeams = async (req: Request, res: Response) => {

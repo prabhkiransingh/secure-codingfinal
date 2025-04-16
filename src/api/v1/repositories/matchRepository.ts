@@ -1,5 +1,5 @@
 import { db } from "../../../../config/firebaseConfig";
-import { Match } from "../models/Match";
+import { Match } from "../models/Matchmodels";
 
 export const getMatches = async (category?: string): Promise<Match[]> => {
   const query = db.collection("matches");

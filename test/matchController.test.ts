@@ -8,7 +8,7 @@ import {
   deleteMatchHandler,
 } from "../src/api/v1/controllers/matchController";
 import * as matchRepository from "../src/api/v1/repositories/matchRepository";
-import { Match, successResponse, errorResponse } from "../src/api/v1/models/Match";
+import { Match, successResponse, errorResponse } from "../src/api/v1/models/Matchmodels";
 
 
 describe("Match Controller", () => {
