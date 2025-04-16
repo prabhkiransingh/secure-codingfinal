@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use("/api/v1/editors", editorRoutes);
 
-// ✅ Mock controller functions
+//  Mock controller functions
 jest.mock("../src/api/v1/controllers/editorController", () => ({
   getEditorDetails: jest.fn((req: Request, res: Response) =>
     res.status(200).send("editor details")
@@ -18,7 +18,7 @@ jest.mock("../src/api/v1/controllers/editorController", () => ({
   ),
 }));
 
-// ✅ Mock authenticate middleware (named export)
+// Mock authenticate middleware (named export)
 jest.mock("../src/api/v1/middleware/authenticate", () => ({
   authenticate: (req: Request, res: Response, next: NextFunction) => {
     res.locals.uid = "editorUser";
@@ -26,7 +26,7 @@ jest.mock("../src/api/v1/middleware/authenticate", () => ({
   },
 }));
 
-// ✅ Mock isAuthorized middleware (default export)
+//  Mock isAuthorized middleware (default export)
 jest.mock("../src/api/v1/middleware/authorize", () => ({
   __esModule: true,
   default: () => (req: Request, res: Response, next: NextFunction) => {

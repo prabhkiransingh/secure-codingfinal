@@ -8,12 +8,12 @@ const app = express();
 app.use(express.json());
 app.use("/api/v1/admin", adminRoutes);
 
-// ✅ Mock the controller
+//  Mock the controller
 jest.mock("../src/api/v1/controllers/adminConroller", () => ({
   setCustomClaims: jest.fn((req: Request, res: Response) => res.status(200).send("claims set")),
 }));
 
-// ✅ Mock authenticate middleware as named export
+// Mock authenticate middleware as named export
 jest.mock("../src/api/v1/middleware/authenticate", () => ({
   authenticate: (req: Request, res: Response, next: NextFunction) => {
     // You can inject test user info if needed
@@ -22,7 +22,7 @@ jest.mock("../src/api/v1/middleware/authenticate", () => ({
   },
 }));
 
-// ✅ Mock isAuthorized middleware as default export
+//  Mock isAuthorized middleware as default export
 jest.mock("../src/api/v1/middleware/authorize", () => ({
   __esModule: true,
   default: () => (req: Request, res: Response, next: NextFunction) => {

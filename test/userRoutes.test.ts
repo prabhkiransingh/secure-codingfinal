@@ -8,14 +8,14 @@ const app = express();
 app.use(express.json());
 app.use("/api/v1/users", userRoutes);
 
-// ✅ Mock the controller
+//  Mock the controller
 jest.mock("../src/api/v1/controllers/userControllers", () => ({
   getUserDetails: jest.fn((req: Request, res: Response) =>
     res.status(200).send("user details")
   ),
 }));
 
-// ✅ Mock authenticate middleware as named export
+//  Mock authenticate middleware as named export
 jest.mock("../src/api/v1/middleware/authenticate", () => ({
   authenticate: (req: Request, res: Response, next: NextFunction) => {
     res.locals.uid = "testUser";
@@ -23,7 +23,7 @@ jest.mock("../src/api/v1/middleware/authenticate", () => ({
   },
 }));
 
-// ✅ Mock isAuthorized middleware as default export
+//  Mock isAuthorized middleware as default export
 jest.mock("../src/api/v1/middleware/authorize", () => ({
   __esModule: true,
   default: () => (req: Request, res: Response, next: NextFunction) => {
