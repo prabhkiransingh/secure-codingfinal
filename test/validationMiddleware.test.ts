@@ -32,7 +32,7 @@ describe("validateRequest middleware", () => {
   it("should reject request with missing required fields", async () => {
     const res = await request(app)
       .post("/test")
-      .send({ name: "John" }); // missing age
+      .send({ name: "John" }); 
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/Validation error/);
