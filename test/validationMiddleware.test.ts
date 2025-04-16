@@ -2,7 +2,7 @@ import request from "supertest";
 import express, { Request, Response } from "express";
 import Joi from "joi";
 
-import { validateRequest } from "../src/api/v1/middleware/validationMiddleware"; // Adjust path if needed
+import { validateRequest } from "../src/api/v1/middleware/validationMiddleware"; 
 
 // Define a sample schema for testing
 const sampleSchema = Joi.object({
@@ -42,7 +42,7 @@ describe("validateRequest middleware", () => {
   it("should reject request with invalid types", async () => {
     const res = await request(app)
       .post("/test")
-      .send({ name: "John", age: "not-a-number" }); // invalid age
+      .send({ name: "John", age: "not-a-number" }); 
 
     expect(res.status).toBe(400);
     expect(res.body.error).toMatch(/"age" must be a number/);

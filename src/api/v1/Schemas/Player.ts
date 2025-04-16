@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const playerSchema = Joi.object({
-  id: Joi.string(), // Optional ID field
+  id: Joi.string(), 
   name: Joi.string().required(),
   teamId: Joi.string().required(),
   role: Joi.string()

@@ -1,6 +1,5 @@
 import Joi from "joi";
 
-// Schema for validating the request body for creating/updating a match
 export const matchSchema = Joi.object({
   id: Joi.string().required(),
   team1: Joi.string().required(),
