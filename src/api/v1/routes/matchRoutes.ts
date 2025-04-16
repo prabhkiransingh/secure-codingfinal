@@ -4,7 +4,7 @@ import { validateRequest } from "../middleware/validationMiddleware";
 import { matchSchema } from "../Schemas/Match";
 import * as matchController from "../controllers/matchController";
 import { authenticate } from "../middleware/authenticate";
-import { isAuthorized } from "../middleware/authorize";
+import  isAuthorized  from "../middleware/authorize";
 
 const router = express.Router();
 
