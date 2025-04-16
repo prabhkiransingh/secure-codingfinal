@@ -5,6 +5,7 @@ import isAuthorized from "../middleware/authorize";
 
 const router: express.Router = express.Router();
 
+
 router.post(
     "/setCustomClaims",
     authenticate,
