@@ -36,7 +36,7 @@ jobs:
 
       matrix:
 
-        language: [ 'javascript' ]  # or 'python', 'typescript', etc.
+        language: [ 'typescript' ]  # or 'python' etc.
  
     steps:
 
