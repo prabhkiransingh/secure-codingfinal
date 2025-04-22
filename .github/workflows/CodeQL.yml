@@ -22,8 +22,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          repository: prabhkiransingh/secure-codingfinal  # Replace with your actual repository name
+          repository: prabhkiransingh/secure-codingfinal  # Your repository
           token: ${{ secrets.MY_PAT }}  # Use the personal access token from GitHub secrets
+          ssh-strict: true  # Use strict SSH checks
+          persist-credentials: true  # Persist credentials for future steps
+          clean: true  # Clean the working directory before checking out
+          fetch-depth: 1  # Perform shallow checkout to save time
+          lfs: false  # Do not fetch large file storage files
+          submodules: false  # Do not initialize submodules
+          set-safe-directory: true  # Mark the directory as safe
 
       # Step 2: Initialize CodeQL
       - name: Initialize CodeQL
