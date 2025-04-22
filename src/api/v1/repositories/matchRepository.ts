@@ -27,7 +27,7 @@ export const createMatch = async (match: Omit<Match, "id">): Promise<string> => 
 export const updateMatch = async (
   id: string,
   updates: Partial<Match>
-): Promise<void> => {
+): Promise<void> => {  
   await db.collection("matches").doc(id).update(updates);
 };
 
