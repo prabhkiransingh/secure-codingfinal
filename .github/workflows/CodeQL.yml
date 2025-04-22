@@ -8,22 +8,22 @@ on:
     branches:
       - main
 
+permissions:
+  security-events: write  # Grant write permissions for security events
+
 jobs:
   analyze:
     name: Analyze code with CodeQL
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 2: Initialize CodeQL
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
-          languages: 'javascript'  # Specify the language(s) you want to analyze
+          languages: 'javascript'
 
-      # Step 3: Perform CodeQL analysis
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v2
