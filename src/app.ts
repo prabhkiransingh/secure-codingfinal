@@ -15,7 +15,7 @@ import setSwagger from "../config/swagger";
 import errorHandler from "./api/v1/middleware/errorHandler";
 import { authenticate } from "./api/v1/middleware/authenticate";
 
-// Load environment variables before using them
+// Load environment variables before them
 dotenv.config();
 
 const app = express();
