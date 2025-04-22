@@ -4,7 +4,7 @@ const UNKNOWN_ERROR_CODE = "UNKNOWN_ERROR";
  * Type guard to check if an unknown value is an Error object.
  *
  * @param error - Value to check
- * @returns True if the value is an Error instance, false otherwise
+ * @returns True if the value is  Error instance, false otherwise
  */
 export function isError(error: unknown): error is Error {
     return error instanceof Error;
