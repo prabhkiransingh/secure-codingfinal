@@ -9,6 +9,7 @@ on:
       - main
 
 permissions:
+  contents: read  # Grant read permissions for repository contents
   security-events: write  # Grant write permissions for security events
 
 jobs:
@@ -17,13 +18,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository using a Personal Access Token (PAT)
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          repository: prabhkiransingh/secure-codingfinal  # Replace with your actual repository name
+          token: ${{ secrets.MY_PAT }}  # Use the personal access token
 
+      # Step 2: Initialize CodeQL
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
-          languages: 'javascript'
+          languages: 'javascript'  # Specify the language(s) to analyze
 
+      # Step 3: Perform CodeQL analysis
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v2
