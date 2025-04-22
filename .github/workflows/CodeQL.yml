@@ -1,4 +1,4 @@
-name: Bandit
+name: CodeQL
 
 on:
   push:
@@ -9,29 +9,35 @@ on:
     - cron: '20 22 * * 4'
 
 jobs:
-  bandit:
+  analyze:
     permissions:
       contents: read  # Allows actions/checkout to fetch code
       security-events: write  # Required for github/codeql-action/upload-sarif to upload SARIF results
-      actions: read  # Only required for private repositories to access actions
-      id-token: write  # Necessary to generate token for authentication in private repos
 
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout the repository code
       - uses: actions/checkout@v4
         with:
-          # Checkout the repository in private repositories
           token: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Bandit Scan
-        uses: shundor/python-bandit-scan@ab1d87dfccc5a0ffab88be3aaac6ffe35c10d6cd
+
+      # Set up CodeQL
+      - name: Set up CodeQL
+        uses: github/codeql-action/setup-codeql@v3
         with:
-          exit_zero: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token with access to the repo
-          
+          languages: 'javascript,python'  # Modify as per your project (e.g., Python + JS)
+
+      # Initialize CodeQL analysis
+      - name: Initialize CodeQL analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: 'security'
+          analysis-name: 'CodeQL Analysis for Cricket API'
+
+      # Upload SARIF results to GitHub
       - name: Upload SARIF results
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
-          token: ${{ secrets.GITHUB_TOKEN }}  # Token for uploading the SARIF results
+          token: ${{ secrets.GITHUB_TOKEN }}  # Token with repo access
