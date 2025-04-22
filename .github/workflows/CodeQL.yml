@@ -1,4 +1,4 @@
-name: CodeQL
+name: CodeQL Analysis
 
 on:
   push:
@@ -24,20 +24,20 @@ jobs:
 
       # Set up CodeQL
       - name: Set up CodeQL
-        uses: github/codeql-action/setup-codeql@v3
+        uses: github/codeql-action/setup-codeql@v2  # Use version v2 instead of v3
         with:
           languages: 'javascript,python'  # Modify as per your project (e.g., Python + JS)
 
       # Initialize CodeQL analysis
       - name: Initialize CodeQL analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v2  # Use version v2 instead of v3
         with:
           category: 'security'
           analysis-name: 'CodeQL Analysis for Cricket API'
 
-      # Upload SARIF results to GitHub
+      # Upload SARIF results
       - name: Upload SARIF results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v2  # Use version v2 instead of v3
         with:
           sarif_file: results.sarif
           token: ${{ secrets.GITHUB_TOKEN }}  # Token with repo access
