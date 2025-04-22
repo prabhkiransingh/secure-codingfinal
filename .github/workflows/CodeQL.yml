@@ -14,21 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up CodeQL
-        uses: github/codeql-action/setup-codeql@v2  # Ensure version v2 is correctly referenced
-
-      - name: Initialize CodeQL database
-        run: |
-          codeql database init --language=javascript
-
-      - name: Run CodeQL analysis
-        run: |
-          codeql analyze --format=sarif-latest --output=codeql-results.sarif
-
-      - name: Upload CodeQL results
-        uses: github/codeql-action/upload-sarif@v2
+      # Step 2: Initialize CodeQL
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
         with:
-          sarif_file: codeql-results.sarif
+          languages: 'javascript'  # Specify the language(s) you want to analyze
+
+      # Step 3: Perform CodeQL analysis
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v2
